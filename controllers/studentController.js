@@ -1,5 +1,7 @@
 const db=require("../utils/db-connection");
 const student=require("../models/student");
+const identitycard=require("../models/identity_card");
+const departments = require("../models/department");
 const addEnteries=async (req,res)=>{
     const {name,email}=req.body;
     try{
@@ -25,6 +27,45 @@ const addEnteries=async (req,res)=>{
         
     //     return res.status(200).send(`New Student added ${name} and ${email}`);
     // })
+};
+const addStuentAndidentity=async(req,res)=>{
+    /*
+        //we wiill pay load data with req.body
+        {
+            student={"name":"jitender"},
+            identitycard={"cardno","12345"}
+        }
+    */
+   try
+   {
+
+              const studenttt=await student.create(req.body.student);
+              const idcard=await identitycard.create({
+                    ...req.body.identitycard,
+                    StudentId:studenttt.id
+              });
+              res.status(201).json({studenttt,idcard});
+    }
+    catch(err)
+    {
+        res.status(500).send(err);
+    }
+};
+const addDepartmentAndStudent=async(req,res)=>{
+         try
+   {
+
+              const department=await departments.create(req.body.department);
+              const studentt=await student.create({
+                    ...req.body.student,
+                    departmentId:department.id
+              });
+              res.status(201).json({department,studentt});
+    }
+    catch(err)
+    {
+        res.status(500).json({error:err.message});
+    }
 };
 const updateEnteries=async(req,res)=>{
     try
@@ -73,10 +114,10 @@ const deleteEnteries=async(req,res)=>{
         });
         if(!studen)
         {
-            res.status(404).send("student not found");
+            return res.status(404).send("student not found");
             
         }
-        res.status(200).send("student delete success");
+        return res.status(200).send("student delete success");
     }
     catch(err)
     {
@@ -102,5 +143,7 @@ const deleteEnteries=async(req,res)=>{
 module.exports={
     addEnteries,
     updateEnteries,
-    deleteEnteries
+    deleteEnteries,
+    addStuentAndidentity,
+    addDepartmentAndStudent
 }

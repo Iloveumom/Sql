@@ -6,7 +6,9 @@ app.use(express.json());
 app.use("/students",studentRoute);
 
 const db=require("./utils/db-connection");
-const studentmodal=require("./models/student");
+//const studentmodal=require("./models/student");
+//all models
+require('./models');
 db.sync().then(()=>{
     app.listen(3000,()=>{
     console.log("Server is running!!!");
