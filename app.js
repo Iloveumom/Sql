@@ -1,9 +1,10 @@
 const express=require("express");
 const studentRoute=require("./routes/studentRoute");
-
+const coursesRoute=require("./routes/courseRoute");
 const app=express();
 app.use(express.json());
 app.use("/students",studentRoute);
+app.use("/courses",coursesRoute);
 
 const db=require("./utils/db-connection");
 //const studentmodal=require("./models/student");
